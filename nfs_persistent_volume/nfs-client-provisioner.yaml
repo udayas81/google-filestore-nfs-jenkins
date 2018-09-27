@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: nfs-client-provisioner
+  namespace: cicd
+---
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: nfs-client-provisioner
+  namespace: cicd
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: nfs-client-provisioner
+    spec:
+      serviceAccountName: nfs-client-provisioner
+      containers:
+        - name: nfs-client-provisioner
+          image: gcr.io/sharedservices-213514/nfs-client-provisioner:09.19.2018
+          volumeMounts:
+            - name: nfs-client-root
+              mountPath: /persistentvolumes
+          env:
+            - name: PROVISIONER_NAME
+              value: nfs-storage
+            - name: NFS_SERVER
+              value: 10.110.133.106
+            - name: NFS_PATH
+              value: /cicd_fileshare
+      volumes:
+        - name: nfs-client-root
+          nfs:
+            server: 10.110.133.106
+            path: /cicd_fileshare
