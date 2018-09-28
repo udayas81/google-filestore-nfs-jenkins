@@ -29,11 +29,11 @@ spec:
             - name: PROVISIONER_NAME
               value: nfs-storage
             - name: NFS_SERVER
-              value: 10.110.133.106
+              value: 10.59.222.202
             - name: NFS_PATH
               value: /cicd_fileshare
       volumes:
         - name: nfs-client-root
           nfs:
-            server: 10.110.133.106
+            server: 10.59.222.202
             path: /cicd_fileshare
